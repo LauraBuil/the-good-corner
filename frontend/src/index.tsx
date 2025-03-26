@@ -14,7 +14,6 @@ import RecentAds from './components/pages/RecentAds.tsx';
 import About from './components/pages/About.tsx';
 import AdDetails from './components/pages/AdDetails.tsx';
 import NewAdForm from './components/pages/NewAdForm.tsx';
-import FilteredByCategory from './components/pages/FilteredByCategory.tsx';
 
 const router = createBrowserRouter([
     {
@@ -38,7 +37,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/ads/category/:id',
-                element: <FilteredByCategory />
+                element: <RecentAds />
             }
         ],
     },

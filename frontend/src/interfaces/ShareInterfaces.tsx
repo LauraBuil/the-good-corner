@@ -4,13 +4,13 @@ export interface AdCardProps {
     title: string;
     description?: string;
     author?: string;
-    price?: number;
-    pictureUrl?: string;
+    price: number;
+    pictureUrl: string;
     city?: string;
     createdAt?: string;
     category?: string;
     tags?: string;
-    link?: string;
+    link: string;
 }
 
 export interface CategoryProps {

@@ -1,3 +1,6 @@
+// React & React Router
+import { useParams } from 'react-router'
+
 // Hooks & States
 import { useState, useEffect } from 'react'
 
@@ -11,16 +14,31 @@ import AdCard from '../reusable/AdCard.tsx';
 import { AdCardProps } from '../../interfaces/ShareInterfaces.tsx';
 
 export default function RecentAds() {
+    const { id } = useParams();
     const [ total, setTotal ] = useState(0)
     const [ ads, setAds ] = useState<AdCardProps[]>([])
 
-    useEffect(() => {
-        const fetchData = async ()=> {
+        const fetchAds = async () => {
+            try {
+                const result = await axios.get(`http://localhost:3000/ads/category/${id}`)
+                setAds(result.data)
+            } catch (error) {
+                console.error
+            }
+        }
+
+        const fetchData = async () => {
             const result = await axios.get("http://localhost:3000/ads")
             setAds(result.data)
         }
-        fetchData()
-    }, [])
+
+    useEffect(() => {
+        if (id) {
+            fetchAds()
+        } else {
+            fetchData()
+        }
+    }, [id])
 
     return (
         <>
