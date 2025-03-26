@@ -2,6 +2,10 @@ GET http://localhost:3000/ads
 
 ###
 
+GET http://localhost:3000/ads/category/1
+
+###
+
 POST http://localhost:3000/ads
 Content-Type: application/json
 
@@ -10,7 +14,7 @@ Content-Type: application/json
   "description": "This is a great product",
   "author": "John Doe",
   "price": 100,
-  "picture_url": "http://example.com/picture.jpg",
+  "pictureUrl": "http://example.com/picture.jpg",
   "city": "New York",
   "category": 1,
   "tags": [
@@ -25,19 +29,11 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3000/ads/1
+PUT http://localhost:3000/ads/26
 Content-Type: application/json
 
 {
-  "category": 2,
-  "tags": [
-    {
-      "id": 1
-    },
-    {
-      "id": 3
-    }
-  ]
+  "picture_url": "https://img.freepik.com/photos-gratuite/gateau-saint-honore-au-chocolat-framboise_661915-252.jpg?t=st=1742918682~exp=1742922282~hmac=fc3504202672d6481d5053edc14807217858271768a8b9cc7f6e2f67b260c489&w=996"
 }
 
 ###

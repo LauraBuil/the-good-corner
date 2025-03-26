@@ -1,11 +1,32 @@
 import { NextFunction, Request, Response } from "express";
-import { Ad } from "../entities/Ad";
+import { Ad } from "../entities/ad";
+
+export const getByCategory = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+
+  try {
+    const ads = await Ad.find({
+      where: { category: { id: parseInt(req.params.id)}},
+      relations: {
+        category: true,
+        tags: true,
+      },
+    });
+    res.send(ads);
+  } catch (err) {
+    next(err);
+  }
+}
 
 export const getAll = async (
   _req: Request,
   res: Response,
   next: NextFunction
 ) => {
+
   try {
     const ads = await Ad.find({
       relations: {
@@ -29,7 +50,7 @@ export const create = async (
   ad.description = req.body.description;
   ad.author = req.body.author;
   ad.price = req.body.price;
-  ad.pictureUrl = req.body.picture_url;
+  ad.pictureUrl = req.body.pictureUrl;
   ad.city = req.body.city;
   ad.category = req.body.category;
   ad.tags = req.body.tags;

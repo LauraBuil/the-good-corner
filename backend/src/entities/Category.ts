@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Ad } from "./Ad";
+import { Ad } from "./ad";
 
 @Entity()
 export class Category extends BaseEntity {

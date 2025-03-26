@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Ad } from "../entities/Ad";
+import { Ad } from "../entities/ad";
 import { Category } from "../entities/Category";
 import { Tag } from "../entities/Tag";
 

@@ -5,7 +5,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Ad } from "./Ad";
+import { Ad } from "./ad";
 
 @Entity("Tag")
 export class Tag extends BaseEntity {
