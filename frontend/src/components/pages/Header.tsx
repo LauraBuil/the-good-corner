@@ -1,72 +1,33 @@
 // React & React Router
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
+
+// Hooks & States
+import { useState, useEffect } from 'react'
+
+// Axios
+import axios from 'axios'
 
 // Types
 import { CategoryProps } from '../../interfaces/ShareInterfaces.tsx';
 
 export default function Header() {
-    const data: CategoryProps[] = [
-        {
-            title: 'Ameublement',
-            link: ''
-        },
-        {
-            title: 'Électroménager',
-            link: ''
-        },
-        {
-            title: 'Photographie',
-            link: ''
-        },
-        {
-            title: 'Informatique',
-            link: ''
-        },
-        {
-            title: 'Téléphonie ',
-            link: ''
-        },
-        {
-            title: 'Vélos',
-            link: ''
-        },
-        {
-            title: 'Véhicules',
-            link: ''
-        },
-        {
-            title: 'Sport',
-            link: ''
-        },
-        {
-            title: 'Habillement',
-            link: ''
-        },
-        {
-            title: 'Bébé',
-            link: ''
-        },
-        {
-            title: 'Outillage',
-            link: ''
-        },
-        {
-            title: 'Services ',
-            link: ''
-        },
-        {
-            title: 'Vacances',
-            link: ''
+    const [ categories, setCategories ] = useState<CategoryProps[]>([])
+
+    useEffect(() => {
+        const fetchData = async ()=> {
+            const result = await axios.get("http://localhost:3000/categories/")
+            setCategories(result.data)
         }
-    ]
+        fetchData()
+    }, [])
+
     return (
         <header className="header">
             <div className="main-menu">
                 <h1>
-                    <Link to="/public" className="button logo link-button"
-                    ><span className="mobile-short-label">TGC</span
-                    ><span className="desktop-long-label">THE GOOD CORNER</span></Link
-                    >
+                    <Link to="/" className="button logo link-button"
+                    ><span className="mobile-short-label">TGC</span><span className="desktop-long-label">THE GOOD CORNER</span>
+                    </Link>
                 </h1>
                 <form className="text-field-with-button">
                     <input className="text-field main-search-field" type="search"/>
@@ -87,14 +48,14 @@ export default function Header() {
                         </svg>
                     </button>
                 </form>
-                <Link to="/post-ad" className="button link-button"
-                ><span className="mobile-short-label">Publier</span
-                ><span className="desktop-long-label">Publier une annonce</span></Link
-                >
+                <Link to="/ad/new" className="button link-button"
+                ><span className="mobile-short-label">Publier</span>
+                <span className="desktop-long-label">Publier une annonce</span>
+                </Link>
             </div>
             <nav className="categories-navigation">
-                {data.map((category) => (
-                    <Link to={category.link} className="category-navigation-link">{category.title}</Link>
+                {categories.map((category) => (
+                    <Link key={category.label} to={`/ads/category/${category.id}`} className="category-navigation-link">{category.label}</Link>
                 ))}
             </nav>
         </header>

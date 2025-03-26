@@ -1,5 +1,5 @@
-// React & React-Router-DOM
-import { Outlet } from 'react-router-dom';
+// React & React-Router
+import { Outlet } from 'react-router';
 
 // Components
 import Header from './components/pages/Header.tsx'
@@ -8,7 +8,9 @@ export default function App() {
     return (
         <>
             <Header />
-            <Outlet />
+            <main className="main-content">
+                <Outlet />
+            </main>
         </>
     );
 }
