@@ -18,26 +18,31 @@ export default function RecentAds() {
     const [ total, setTotal ] = useState(0)
     const [ ads, setAds ] = useState<AdCardProps[]>([])
 
-        const fetchAds = async () => {
+        const fetchData = async () => {
             try {
-                const result = await axios.get(`http://localhost:3000/ads/category/${id}`)
-                setAds(result.data)
+                if (id) {
+                    const result = await axios.get(`http://localhost:3000/ads/category/${id}`)
+                    setAds(result.data)
+                } else {
+                    const result = await axios.get("http://localhost:3000/ads")
+                    setAds(result.data)
+                }
             } catch (error) {
                 console.error
             }
         }
 
-        const fetchData = async () => {
-            const result = await axios.get("http://localhost:3000/ads")
-            setAds(result.data)
-        }
+        // const delAds = async (id: number) => {
+        //     try {
+        //       await axios.delete(`http://localhost:3000/ads/${id}`)
+        //       fetchData()
+        //     } catch (error) {
+        //       console.error
+        //     }
+        //   }
 
     useEffect(() => {
-        if (id) {
-            fetchAds()
-        } else {
             fetchData()
-        }
     }, [id])
 
     return (
@@ -55,6 +60,9 @@ export default function RecentAds() {
                                 <button className='button' onClick={() => setTotal(total + ad.price)}>
                                     Ajouter le prix au total
                                 </button>
+                                {/* <button className='button' onClick={() => delAds(ad.id)}>
+                                    Supprimer
+                                </button> */}
                         </div>
                     ))}
                 </section>
