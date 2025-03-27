@@ -40,7 +40,7 @@ export class Ad extends BaseEntity {
   @ManyToOne(() => Category, (category) => category.ads, { nullable: false })
   category!: Category;
 
-  @ManyToMany(() => Tag)
+  @ManyToMany(() => Tag, {eager: true})
   @JoinTable({
     name: "ad_tag",
     joinColumn: { name: "adId", referencedColumnName: "id" },

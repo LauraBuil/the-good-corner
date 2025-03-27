@@ -43,6 +43,7 @@ export default function RecentAds() {
 
     useEffect(() => {
             fetchData()
+            console.log('coucou')
     }, [id])
 
     return (
@@ -56,7 +57,7 @@ export default function RecentAds() {
                             <AdCard title={ad.title}
                                 pictureUrl={ad.pictureUrl}
                                 price={ad.price}
-                                link={ad.link} />
+                                link={`/ads/${ad.id}`} />
                                 <button className='button' onClick={() => setTotal(total + ad.price)}>
                                     Ajouter le prix au total
                                 </button>

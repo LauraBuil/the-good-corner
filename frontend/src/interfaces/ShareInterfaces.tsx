@@ -13,9 +13,14 @@ export interface AdCardProps {
     link: string;
 }
 
+export interface Tags {
+    id: number;
+    label: string;
+}
+
 export interface CategoryProps {
     label: string;
-    link: string;
+    link?: string;
     id?: number;
 }
 

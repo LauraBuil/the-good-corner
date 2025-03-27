@@ -5,6 +5,7 @@ const router = Router();
 
 router.get("/", adController.getAll);
 router.get("/category/:id", adController.getByCategory)
+router.get("/:id", adController.getOne)
 router.post("/", adController.create);
 router.put("/:id", adController.update);
 router.delete("/:id", adController.remove);

@@ -21,6 +21,29 @@ export const getByCategory = async (
   }
 }
 
+export const getOne = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const ad = await Ad.findOne({
+      where: { id: parseInt(req.params.id) },
+      relations: {
+        category: true,
+        tags: true,
+      },
+    });
+    if (!ad) {
+      res.status(404).send("Ad not found");
+      return;
+    }
+    res.send(ad);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getAll = async (
   _req: Request,
   res: Response,
@@ -53,7 +76,7 @@ export const create = async (
   ad.pictureUrl = req.body.pictureUrl;
   ad.city = req.body.city;
   ad.category = req.body.category;
-  ad.tags = req.body.tags;
+  ad.tags = req.body.tags.map((tag: string) => ({ id : parseInt(tag)}));
 
   try {
     await ad.save();

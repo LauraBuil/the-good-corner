@@ -1,5 +1,6 @@
 // Librairies
 import { useForm, SubmitHandler } from "react-hook-form"
+import { toast } from 'react-toastify';
 
 // Hooks & States
 import { useState, useEffect } from 'react'
@@ -8,13 +9,14 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 // Types
-import { CategoryProps, AdCardProps } from '../../interfaces/ShareInterfaces.tsx';
+import { CategoryProps, AdCardProps, Tags } from '../../interfaces/ShareInterfaces.tsx';
 
 // Components
 // import InputNewAd from '../reusable/InputNewAd.tsx'
 
 export default function NewAdForm() {
     const [ categories, setCategories ] = useState<CategoryProps[]>([])
+    const [ tags, setTags ] = useState<Tags[]>([])
 
     // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     //     e.preventDefault()
@@ -33,6 +35,8 @@ export default function NewAdForm() {
             const fetchData = async ()=> {
             const result = await axios.get("http://localhost:3000/categories/")
             setCategories(result.data)
+            const tags = await axios.get("http://localhost:3000/tags/")
+            setTags(tags.data)
         }
         fetchData()
         } catch (error) {
@@ -43,7 +47,13 @@ export default function NewAdForm() {
 
     const { register, handleSubmit } = useForm<AdCardProps>()
       const onSubmit: SubmitHandler<AdCardProps> = (async(data) => {
-        await axios.post("http://localhost:3000/ads", data)
+        try {
+            await axios.post("http://localhost:3000/ads", data)
+            toast.success('Votre annonce a bien été créée')
+        } catch (err) {
+            console.log(err)
+            toast.error('Il a une erreur')
+        }
         })
 
     return (
@@ -70,7 +80,7 @@ export default function NewAdForm() {
                         <input {...register("city")} className="text-field-input" defaultValue={"Montpellier"}/>
                     </label>
                     <label className="text-field">Créé le
-                        <input {...register("createdAt")} className="text-field-input"/>
+                        <input {...register("createdAt")} className="text-field-input" defaultValue={"22/03/2025"}/>
                     </label>
                     <label className="text-field">Catégorie
                         <select {...register("category")} className='text-field-input'>
@@ -81,6 +91,13 @@ export default function NewAdForm() {
                             ))}
                         </select>
                     </label>
+                    <div className="text-field">
+                        {tags.map((tag) => 
+                            <label key={tag.id}>{tag.label}
+                                <input value={tag.id} {...register("tags")} type="checkbox"/>
+                            </label>
+                        )}
+                    </div>
                 </div>
                 <input type="submit" className="form-button"/>
                 </form>

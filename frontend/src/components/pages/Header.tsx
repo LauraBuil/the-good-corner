@@ -52,6 +52,7 @@ export default function Header() {
                 ><span className="mobile-short-label">Publier</span>
                 <span className="desktop-long-label">Publier une annonce</span>
                 </Link>
+                <Link to="/newcategories" className="button link-button">Ajouter une catégorie</Link>
             </div>
             <nav className="categories-navigation">
                 {categories.map((category) => (
