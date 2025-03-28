@@ -1,6 +1,6 @@
 // Types
 export interface AdCardProps {
-    id?: number;
+    id: number;
     title: string;
     description?: string;
     author?: string;
@@ -8,8 +8,22 @@ export interface AdCardProps {
     pictureUrl: string;
     city?: string;
     createdAt?: string;
-    category?: string;
-    tags?: string;
+    category?: Category;
+    tags?: number[];
+    link: string;
+}
+
+export interface AdDetails {
+    id: number;
+    title: string;
+    description?: string;
+    author?: string;
+    price: number;
+    pictureUrl: string;
+    city?: string;
+    createdAt?: string;
+    category: Category;
+    tags?: number[];
     link: string;
 }
 

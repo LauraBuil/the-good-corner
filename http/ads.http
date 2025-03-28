@@ -2,6 +2,10 @@ GET http://localhost:3000/ads/2
 
 ###
 
+GET http://localhost:3000/ads/search/voiture
+
+###
+
 GET http://localhost:3000/ads/category/1
 
 ###

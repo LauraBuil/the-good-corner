@@ -12,6 +12,7 @@ export default function AdCard({title, pictureUrl, price, link}: AdCardProps) {
                 <div className="ad-card-text">
                     <div className="ad-card-title">{title}</div>
                     <div className="ad-card-price">{price} €</div>
+                    
                 </div>
             </Link>
         </div>

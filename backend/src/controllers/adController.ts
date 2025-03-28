@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Ad } from "../entities/ad";
+import { ILike } from "typeorm";
+import DataSource from "../config/db";
 
 export const getByCategory = async (
   req: Request,
@@ -18,6 +20,27 @@ export const getByCategory = async (
     res.send(ads);
   } catch (err) {
     next(err);
+  }
+}
+
+export const getFilteredAds = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const query = req.params.query as string;
+    const ads = await DataSource.getRepository(Ad)
+        .createQueryBuilder("ad")
+        .leftJoinAndSelect("ad.category", "category")
+        .leftJoinAndSelect("ad.tags", "tags")
+        .where("ad.title LIKE :query", { query: `%${query}%` })
+        .orWhere("ad.description LIKE :query", { query: `%${query}%` })
+        .getMany();
+
+    res.send(ads);
+  } catch (err) {
+    next(err)
   }
 }
 
@@ -49,7 +72,6 @@ export const getAll = async (
   res: Response,
   next: NextFunction
 ) => {
-
   try {
     const ads = await Ad.find({
       relations: {

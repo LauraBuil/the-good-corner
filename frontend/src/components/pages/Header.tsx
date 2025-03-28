@@ -1,5 +1,5 @@
 // React & React Router
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 // Hooks & States
 import { useState, useEffect } from 'react'
@@ -12,6 +12,18 @@ import { CategoryProps } from '../../interfaces/ShareInterfaces.tsx';
 
 export default function Header() {
     const [ categories, setCategories ] = useState<CategoryProps[]>([])
+    const navigate = useNavigate()
+
+    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const form = e.target
+        const formData = new FormData(form as HTMLFormElement)
+
+        const formJson = Object.fromEntries(formData.entries())
+        console.log(formJson.word)
+                    
+        navigate(`/search/${formJson.word}`)
+    }
 
     useEffect(() => {
         const fetchData = async ()=> {
@@ -29,8 +41,8 @@ export default function Header() {
                     ><span className="mobile-short-label">TGC</span><span className="desktop-long-label">THE GOOD CORNER</span>
                     </Link>
                 </h1>
-                <form className="text-field-with-button">
-                    <input className="text-field main-search-field" type="search"/>
+                <form className="text-field-with-button" onSubmit={handleSearch}>
+                    <input className="text-field main-search-field" type="search" name="word"/>
                     <button className="button button-primary">
                         <svg
                             aria-hidden="true"

@@ -1,6 +1,9 @@
 // Hooks & States
 import { useEffect } from 'react'
 
+// React & React Router
+import { useNavigate } from 'react-router'
+
 // Librairies
 import { useForm, SubmitHandler } from "react-hook-form"
 import { toast } from 'react-toastify';
@@ -12,14 +15,14 @@ import { CategoryProps } from '../../interfaces/ShareInterfaces.tsx';
 import axios from 'axios'
 
 export default function AddNewCategoryAndTags() {
-
-    
-
     const { register, handleSubmit } = useForm<CategoryProps>()
+    const navigate = useNavigate()
+
       const onSubmit: SubmitHandler<CategoryProps> = (async(data) => {
         try {
             await axios.post("http://localhost:3000/categories", data)
-            toast.success('Votre annonce a bien été créée')
+            toast.success('Votre catégorie a bien été créée')
+            navigate("/")
         } catch (err) {
             console.log(err)
             toast.error('Il a une erreur')

@@ -15,6 +15,8 @@ import About from './components/pages/About.tsx';
 import AdDetails from './components/pages/AdDetails.tsx';
 import NewAdForm from './components/pages/NewAdForm.tsx';
 import AddNewCategoryAndTags from './components/pages/AddNewCategoryAndTags.tsx';
+import SearchBar from './components/pages/SearchBar.tsx';
+import ModifyAdForm from './components/pages/ModifyAdForm.tsx';
 
 const router = createBrowserRouter([
     {
@@ -33,6 +35,10 @@ const router = createBrowserRouter([
                 element: <AdDetails />
             },
             {
+                path: '/ads/modify/:id',
+                element: <ModifyAdForm />
+            },
+            {
                 path: '/ad/new',
                 element: <NewAdForm />
             },
@@ -44,6 +50,11 @@ const router = createBrowserRouter([
                 path: '/newcategories',
                 element: <AddNewCategoryAndTags />
             },
+            {
+                path: '/search/:keyword',
+                element: <SearchBar />
+            },
+        
         ],
     },
 ]);

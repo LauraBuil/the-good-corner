@@ -32,18 +32,8 @@ export default function RecentAds() {
             }
         }
 
-        // const delAds = async (id: number) => {
-        //     try {
-        //       await axios.delete(`http://localhost:3000/ads/${id}`)
-        //       fetchData()
-        //     } catch (error) {
-        //       console.error
-        //     }
-        //   }
-
     useEffect(() => {
             fetchData()
-            console.log('coucou')
     }, [id])
 
     return (
@@ -54,16 +44,15 @@ export default function RecentAds() {
                 <section className="recent-ads">
                     {ads.map((ad) => (
                         <div key={ad.id}>
-                            <AdCard title={ad.title}
+                            <AdCard
+                                id={ad.id}
+                                title={ad.title}
                                 pictureUrl={ad.pictureUrl}
                                 price={ad.price}
                                 link={`/ads/${ad.id}`} />
                                 <button className='button' onClick={() => setTotal(total + ad.price)}>
                                     Ajouter le prix au total
                                 </button>
-                                {/* <button className='button' onClick={() => delAds(ad.id)}>
-                                    Supprimer
-                                </button> */}
                         </div>
                     ))}
                 </section>
