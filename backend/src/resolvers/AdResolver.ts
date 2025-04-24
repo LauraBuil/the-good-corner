@@ -7,7 +7,7 @@ import Tag from "../entities/Tag";
 @InputType()
 class AdInput {
     @Field()
-    title!: string; //TODO make it required with '!' ?
+    title!: string;
 
     @Field()
     description!: string;
