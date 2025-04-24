@@ -12,15 +12,15 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 // Types
-import { CategoryProps, AdDetails, Tags } from '../../interfaces/ShareInterfaces.tsx';
+import { Category, AdDetailsTest, Tags, AdFormData } from '../../interfaces/ShareInterfaces.tsx';
 
 // Components
 // import InputNewAd from '../reusable/InputNewAd.tsx'
 
 export default function NewAdForm() {
-    const [ categories, setCategories ] = useState<CategoryProps[]>([])
+    const [ categories, setCategories ] = useState<Category[]>([])
     const [ tags, setTags ] = useState<Tags[]>([])
-    const [ adToModify, setAdToModify ] = useState<AdDetails | null>(null)
+    const [ adToModify, setAdToModify ] = useState<AdDetailsTest>()
     const { id } = useParams()
     const navigate = useNavigate()
 
@@ -44,7 +44,7 @@ export default function NewAdForm() {
             const fetchData = async ()=> {
                 const toUpdate = await axios.get(`http://localhost:3000/ads/${id}`)
                 setAdToModify(toUpdate.data)
-                const result = await axios.get("http://localhost:3000/categories/")
+                const result = await axios.get<Category[]>("http://localhost:3000/categories")
                 setCategories(result.data)
                 const tags = await axios.get("http://localhost:3000/tags/")
                 setTags(tags.data)
@@ -56,17 +56,66 @@ export default function NewAdForm() {
         
     }, [id])
 
-    const { register, handleSubmit } = useForm<AdDetails>()
-      const onSubmit: SubmitHandler<AdDetails> = (async(data) => {
-        try {
-            await axios.put(`http://localhost:3000/ads/${id}`, data)
-            toast.success('Votre annonce a bien été modifiée')
-            navigate(`/ads/${id}`)
-        } catch (err) {
-            console.log(err)
-            toast.error('Il a une erreur')
+    const { register, handleSubmit, setValue } = useForm<AdFormData>({
+        defaultValues: {
+          title: adToModify?.title,
+          description: adToModify?.description,
+          author: adToModify?.author,
+          price: adToModify?.price,
+          pictureUrl: adToModify?.pictureUrl,
+          city: adToModify?.city,
+          createdAt: adToModify?.createdAt,
+          categoryId: adToModify?.category.id.toString(),
+          tags: adToModify?.tags.map(tag => tag.id.toString()),
         }
-        })
+      });
+    const onSubmit: SubmitHandler<AdFormData> = async (data) => {
+        try {
+          const selectedTags = Array.isArray(data.tags) 
+            ? data.tags 
+            : data.tags ? [data.tags] : [];
+      
+          const dataToSend = {
+            ...data,
+            category: { id: Number(data.categoryId) },
+            tags: selectedTags.map((tagId) => ({ id: Number(tagId) })),
+          };
+      
+          await axios.put(`http://localhost:3000/ads/${id}`, dataToSend);
+          toast.success("Annonce modifiée avec succès!");
+          navigate(`/ads/${id}`);
+        } catch (error) {
+          console.error(error);
+          toast.error("Une erreur est survenue lors de la modification de l'annonce");
+        }
+      };
+
+    useEffect(() => {
+        if (adToModify && categories.length > 0) {
+            console.log("Setting form values");
+            setValue("title", adToModify.title);
+            setValue("description", adToModify.description);
+            setValue("author", adToModify.author);
+            setValue("price", adToModify.price);
+            setValue("pictureUrl", adToModify.pictureUrl);
+            setValue("city", adToModify.city);
+            setValue("createdAt", adToModify.createdAt);
+            setValue("categoryId", adToModify.category.id.toString());
+            setValue("tags", adToModify.tags.map((tag) => tag.id.toString()));
+        }
+    }, [adToModify, categories, setValue]);
+
+    // const { register, handleSubmit } = useForm<AdDetailsTest>()
+    //   const onSubmit: SubmitHandler<AdDetailsTest> = (async(data) => {
+    //     try {
+    //         await axios.put(`http://localhost:3000/ads/${id}`, data)
+    //         toast.success('Votre annonce a bien été modifiée')
+    //         navigate(`/ads/${id}`)
+    //     } catch (err) {
+    //         console.log(err)
+    //         toast.error('Il a une erreur')
+    //     }
+    //     })
 
     return (
         <>
@@ -75,47 +124,60 @@ export default function NewAdForm() {
                 <form onSubmit={handleSubmit(onSubmit)} className='form'>
                 <div className='form-input'>
                     <label className="text-field">Titre
-                        <input {...register("title")} className="text-field-input" defaultValue={adToModify.title}/>
+                        <input {...register("title")} className="text-field-input"/>
                     </label>
                     <label className="text-field">Description
-                        <input {...register("description")} className="text-field-input" defaultValue={adToModify.description}/>
+                        <input {...register("description")} className="text-field-input"/>
                     </label>
                     <label className="text-field">Auteur
-                        <input {...register("author")} className="text-field-input" defaultValue={adToModify.author}/>
+                        <input {...register("author")} className="text-field-input"/>
                     </label>
                     <label className="text-field">Prix
-                        <input type="number" {...register("price", { valueAsNumber: true })} className="text-field-input" defaultValue={adToModify.price}/>
+                        <input type="number" {...register("price", { valueAsNumber: true })} className="text-field-input"/>
                     </label>
                     <label className="text-field">Images
-                        <input {...register("pictureUrl")} className="text-field-input" defaultValue={adToModify.pictureUrl}/>
+                        <input {...register("pictureUrl")} className="text-field-input"/>
                     </label>
                     <label className="text-field">Localisation
-                        <input {...register("city")} className="text-field-input" defaultValue={adToModify.city}/>
+                        <input {...register("city")} className="text-field-input"/>
                     </label>
                     <label className="text-field">Créé le
-                        <input {...register("createdAt")} className="text-field-input" defaultValue={adToModify.createdAt}/>
+                        <input {...register("createdAt")} className="text-field-input"/>
                     </label>
                     <label className="text-field">Catégorie
-                        <select {...register("category", {required: true})} className='text-field-input' defaultValue={adToModify.category.id}>
-                            {categories.map((el) => (
-                                <option value={el.id} key={el.label}>
-                                    {el.label}
+                        <select {...register("categoryId", { required: true })} className="text-field-input">
+                            {categories.map((cat) => (
+                                <option value={cat.id} key={cat.id}>
+                                    {cat.label}
                                 </option>
                             ))}
                         </select>
                     </label>
                     <div className="text-field">
-                        {tags.map((tag) => 
-                            <label key={tag.id}>{tag.label}
-                                <input value={String(tag.id)} {...register("tags")} type="checkbox" defaultChecked={adToModify.tags?.includes(tag.id)}/>
+                        {tags.map((tag) => (
+                            <label key={tag.id}>
+                                <input
+                                //defaultChecked={ad.tags.some((adTag) => adTag.id === tag.id)}
+                                defaultChecked={
+                                    adToModify.tags.some((currTag) => currTag.id === tag.id)}
+                                type="checkbox"
+                                value={tag.id}
+                                {...register(`tags`)}
+                                />
+                                {tag.label}
                             </label>
-                        )}
+                            ))}                       
+                     {/* {tags.map((tag) => 
+                            <label key={tag.id}>{tag.label}
+                                <input value={tag.id} {...register("tags")} type="checkbox" defaultChecked={adToModify.tags?.some((adTags) => adTags === tag.id)}/>
+                            </label>
+                        )} */}
                     </div>
                 </div>
                 <input type="submit" className="form-button"/>
                 </form>
                 ) : (
-                    <p>Impossible de modifier l'annonce</p>  // Affiche un message de chargement tant que adToModify est null
+                    <p>Impossible de modifier l'annonce</p>
                 )}
     {/* <form onSubmit={handleSubmit} className='form'>
     <div className='form-input'>

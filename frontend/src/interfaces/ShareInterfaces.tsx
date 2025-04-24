@@ -9,7 +9,7 @@ export interface AdCardProps {
     city?: string;
     createdAt?: string;
     category?: Category;
-    tags?: number[];
+    tags?: Tags[];
     link: string;
 }
 
@@ -27,6 +27,25 @@ export interface AdDetails {
     link: string;
 }
 
+export interface AdDetailsTest {
+    id: number;
+    title: string;
+    description: string;
+    author: string;
+    price: number;
+    pictureUrl: string;
+    city: string;
+    createdAt: string;
+    category: {
+      id: number;
+      label: string;
+    };
+    tags: {
+      id: number;
+      label: string;
+    }[];
+}
+
 export interface Tags {
     id: number;
     label: string;
@@ -40,7 +59,7 @@ export interface CategoryProps {
 
 export interface Category {
     id: number,
-    title: string,
+    label: string,
 }
 
 export interface InputType {
@@ -50,3 +69,15 @@ export interface InputType {
     accept?: string;
     defaultValue?: string;
 }
+
+export interface AdFormData {
+    title: string;
+    description: string;
+    author: string;
+    price: number;
+    pictureUrl: string;
+    city: string;
+    createdAt: string;
+    categoryId: string | number;
+    tags: string[] | string; // parfois c’est juste un string
+  }

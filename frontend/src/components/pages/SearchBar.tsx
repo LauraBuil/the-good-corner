@@ -32,7 +32,7 @@ useEffect(() => {
         fetchData()
 }, [keyword])
 
-    return(
+    return (
         <>
             {ads.length > 0 ? (
                 <>

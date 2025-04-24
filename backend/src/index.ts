@@ -1,20 +1,19 @@
-import "reflect-metadata";
-import app from "./app";
+import 'reflect-metadata';
+import { ApolloServer } from "@apollo/server";
+import {startStandaloneServer} from "@apollo/server/standalone";
+import { buildSchema } from "type-graphql";
+import AdResolver from "./resolvers/AdResolver";
+import CategoryResolver from "./resolvers/CategoryResolver";
+import TagResolver from "./resolvers/TagResolver";
 import dataSource from "./config/db";
 
-const port = 3000;
-
-const startServer = async () => {
-  try {
-    await dataSource.initialize();
-    console.log("Database connection established");
-
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
-  } catch (err) {
-    console.error("Failed to start server:", err);
-  }
-};
-
+async function startServer() {
+  await dataSource.initialize();
+  const schema = await buildSchema({
+    resolvers: [ AdResolver, CategoryResolver, TagResolver ],
+  });
+  const apolloServer = new ApolloServer({ schema: schema});
+  const { url } = await startStandaloneServer(apolloServer);
+  console.log(`🚀  Server ready at: ${url}`);
+}
 startServer();
